@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/bgGray"
+    tools:context="com.ruobilin.basf.basfchemical.activity.ChemicalsDetailActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/home_top_rl"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/bgWhite">
+
+        <ImageView
+            android:id="@+id/back_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:padding="5dp"
+            android:src="@mipmap/back_icon"
+            android:layout_marginStart="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/chemical_detail"
+            android:textColor="@color/fontBlack"
+            android:textSize="@dimen/font_size_main_title_big"
+            tools:text="药品详情" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/bgWhite"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/chemical_name_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/chemical_name"
+                    android:textColor="@color/fontBlack"
+                    android:textSize="@dimen/font_size_main_title_big"
+                    android:layout_marginStart="5dp" />
+
+                <TextView
+                    android:id="@+id/chemical_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_toEndOf="@id/chemical_name_desc"
+                    android:layout_toRightOf="@id/chemical_name_desc"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/fontGray"
+                    android:textSize="@dimen/font_size_main_title"
+                    android:gravity="right"
+                    tools:text="化学品名化学学品名化学品学品名" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="1dp"
+
+                android:background="@color/bgWhite"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/code"
+                    android:textColor="@color/fontBlack"
+                    android:textSize="@dimen/font_size_main_title_big" />
+
+                <TextView
+                    android:id="@+id/chemical_code_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/fontGray"
+                    android:textSize="@dimen/font_size_main_title"
+                    tools:text="化学品名" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="1dp"
+
+                android:background="@color/bgWhite"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/cas_number"
+                    android:textColor="@color/fontBlack"
+                    android:textSize="@dimen/font_size_main_title_big" />
+
+                <TextView
+                    android:id="@+id/chemical_cas_code_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/fontGray"
+                    android:textSize="@dimen/font_size_main_title"
+                    tools:text="化学品名" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="1dp"
+
+                android:background="@color/bgWhite"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/dangerous_chemical"
+                    android:textColor="@color/fontBlack"
+                    android:textSize="@dimen/font_size_main_title_big" />
+
+                <TextView
+                    android:id="@+id/chemical_dangerous_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/fontGray"
+                    android:textSize="@dimen/font_size_main_title"
+                    tools:text="化学品名" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="1dp"
+
+                android:background="@color/bgWhite"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/release_date"
+                    android:textColor="@color/fontBlack"
+                    android:textSize="@dimen/font_size_main_title_big" />
+
+                <TextView
+                    android:id="@+id/chemical_release_date_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/fontGray"
+                    android:textSize="@dimen/font_size_main_title"
+                    tools:text="化学品名" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="1dp"
+
+                android:background="@color/bgWhite"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/cmr"
+                    android:textColor="@color/fontBlack"
+                    android:textSize="@dimen/font_size_main_title_big" />
+
+                <TextView
+                    android:id="@+id/chemical_cmr_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/fontGray"
+                    android:textSize="@dimen/font_size_main_title"
+                    tools:text="化学品名" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/bgWhite"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/chemical_h_phrase_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/h_phrase"
+                    android:textColor="@color/fontBlack"
+                    android:textSize="@dimen/font_size_main_title_big" />
+
+                <TextView
+                    android:id="@+id/chemical_h_phrase_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/chemical_h_phrase_desc"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/fontGray"
+                    android:textSize="@dimen/font_size_main_title"
+                    android:gravity="right"
+                    tools:text="化学品名化学品名化学品名化学品名化学品名化学品名化学品名化学品名化学品名化学品名化学品名化学品名化学品名化学品名化学品名名" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/bgWhite"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/inventory"
+                    android:textColor="@color/fontBlack"
+                    android:textSize="@dimen/font_size_main_title_big" />
+
+                <TextView
+                    android:id="@+id/chemical_inventory_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/fontGray"
+                    android:textSize="@dimen/font_size_main_title"
+                    tools:text="化学品名" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/bgWhite"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:text="@string/msds"
+                android:textColor="@color/fontBlack"
+                android:textSize="@dimen/font_size_main_title_big" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/files_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
+                android:paddingBottom="50dp"
+                />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</LinearLayout>

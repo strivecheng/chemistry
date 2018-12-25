@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray"
+    tools:context="com.ruobilin.basf.basfchemical.activity.SettingActivity">
+
+    <RelativeLayout
+        android:id="@+id/setting_top_rl"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/bgWhite"
+        >
+
+        <ImageView
+            android:id="@+id/back_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:padding="5dp"
+            android:src="@mipmap/back_icon"
+            android:layout_marginStart="15dp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/setting"
+            android:textColor="@color/fontBlack"
+            android:textSize="@dimen/font_size_main_title_big"
+            tools:text="@string/setting"
+            />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/language_rl"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/bgWhite"
+        app:layout_constraintTop_toBottomOf="@id/setting_top_rl">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/language"
+            android:text="@string/language"
+            android:layout_centerVertical="true"
+            android:textColor="@color/fontBlack"
+            android:textSize="26sp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp" />
+        <ImageView
+            android:id="@+id/arrows_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/right_arrows"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            />
+
+        <TextView
+            android:id="@+id/language_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/simple_chinese"
+            android:text="@string/simple_chinese"
+            android:textColor="@color/fontGray"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/arrows_image"
+            android:textSize="24sp"
+            android:layout_toStartOf="@id/arrows_image" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/version_rl"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/bgWhite"
+        app:layout_constraintTop_toBottomOf="@id/language_rl">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/release_date"
+            android:text="@string/release_date"
+            android:layout_centerVertical="true"
+            android:textColor="@color/fontBlack"
+            android:textSize="26sp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp" />
+
+
+
+        <TextView
+            android:id="@+id/version_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="2018-10-12"
+            android:textColor="@color/fontGray"
+            android:layout_centerVertical="true"
+            android:textSize="24sp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/import_btn"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        tools:text="import"
+        android:textAllCaps="false"
+        android:text="@string/importing"
+        android:layout_marginTop="30dp"
+        android:textSize="26sp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:textColor="@color/fontWhite"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/import_btn_bg"
+        app:layout_constraintTop_toBottomOf="@id/version_rl"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/technical_support_by_rbl"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="20dp"
+        android:textSize="@dimen/font_size_main_content"
+        android:textColor="@color/fontGray"
+        />
+
+
+</android.support.constraint.ConstraintLayout>

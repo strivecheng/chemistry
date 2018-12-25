@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ChemicalQuery</string>
+    <string name="home_title">BASF Chemical Query</string>
+    <string name="language">Language</string>
+    <string name="simple_chinese">简体中文</string>
+    <string name="setting">Setting</string>
+    <string name="version">Version</string>
+    <string name="importing">Import</string>
+    <string name="scan_one_scan">Scan</string>
+    <string name="release_date">ReleaseDate</string>
+    <string name="cancel">Cancel</string>
+    <string name="setting_language">Set Language</string>
+    <string name="request_camera_permission_tips">Request camera permission</string>
+    <string name="request_write_external">Request file permission</string>
+    <string name="import_file_success">Success for import</string>
+    <string name="cas_number">CASNumber</string>
+    <string name="error_format">Incorrect format, parsing failure</string>
+    <string name="not_search_data">No data found</string>
+    <string name="inventory">Inventory(kg)</string>
+    <string name="chemical_name">Chemical Name</string>
+    <string name="getting_data">Getting data</string>
+    <string name="search_data">Looking for data</string>
+    <string name="technical_support_by_rbl">Powered By Ruobilin software</string>
+    <string name="chemical_detail">Chemical Detail</string>
+    <string name="code">Code</string>
+    <string name="dangerous_chemical">Dangerous Chemical</string>
+    <string name="cmr">CMR</string>
+    <string name="h_phrase">H-Phrase</string>
+    <string name="msds">MSDS</string>
+    <string name="copying">Copying</string>
+    <string name="unziping">Decompression</string>
+    <string name="unzip_success">Decompression success</string>
+    <string name="analysis_data">Data being parsed</string>
+    <string name="search">Search</string>
+    <string name="no_data_and_import_from_setting">No data was found</string>
+    <string name="please_selected_zip_file">Please selected zip file</string>
+    <string name="close_flashlight">Close flashlight</string>
+    <string name="open_flashlight">Open flashlight</string>
+</resources>

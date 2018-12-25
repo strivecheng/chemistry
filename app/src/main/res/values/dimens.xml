@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 超大大标题字体 -->
+    <dimen name="font_size_main_title_large">28sp</dimen>
+    <!-- 大标题字体 -->
+    <dimen name="font_size_main_title_big">26sp</dimen>
+    <!-- 标题字体 -->
+    <dimen name="font_size_main_title">24sp</dimen>
+    <!-- 小字体-->
+    <dimen name="font_size_main_content">20sp</dimen>
+</resources>

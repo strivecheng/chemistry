@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray"
+    android:orientation="vertical"
+    tools:context="com.ruobilin.basf.basfchemical.activity.SearchChemicalActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/search_top_rlt"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/search_layout_bg"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="5dp">
+
+        <EditText
+            android:id="@+id/search_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableLeft="@mipmap/gray_search"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp"
+            android:hint="@string/search"
+            android:textSize="@dimen/font_size_main_content"
+            android:background="@null"
+            android:textCursorDrawable="@null"
+            />
+        <TextView
+            android:id="@+id/cancel_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:textSize="@dimen/font_size_main_content"
+            />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/chemical_list_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_top_rlt" />
+
+    <TextView
+        android:id="@+id/no_data_tv"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="@string/not_search_data"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        tools:visibility="visible"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="@dimen/font_size_main_title_big"/>
+
+</android.support.constraint.ConstraintLayout>

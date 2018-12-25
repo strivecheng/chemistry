@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--************ SJUILoading ***********-->
+    <declare-styleable name="SJUILoadingView">
+        <attr name="sj_ui_loading_view_size" format="dimension"/>
+        <attr name="android:color"/>
+    </declare-styleable>
+    <attr name="SJUILoadingStyle" format="reference"/>
+</resources>
