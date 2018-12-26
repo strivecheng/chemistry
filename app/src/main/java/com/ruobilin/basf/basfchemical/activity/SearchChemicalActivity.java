@@ -18,9 +18,12 @@ import com.ruobilin.basf.basfchemical.base.BaseActivity;
 import com.ruobilin.basf.basfchemical.bean.ChemicalInfo;
 import com.ruobilin.basf.basfchemical.bean.FileInfo;
 import com.ruobilin.basf.basfchemical.common.Constant;
+import com.ruobilin.basf.basfchemical.contract.SearchChemicalContract;
 import com.ruobilin.basf.basfchemical.dao.AbstractMyChemicalDataBase;
 import com.ruobilin.basf.basfchemical.dao.ChemicalDao;
 import com.ruobilin.basf.basfchemical.dao.FileDao;
+import com.ruobilin.basf.basfchemical.model.ChemicalModelImpl;
+import com.ruobilin.basf.basfchemical.presenter.SearchChemicalPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +36,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Create by xingcc on 2018/12/7
  * main function: 搜索药品界面
  *
  * @author xingcc
  */
-public class SearchChemicalActivity extends BaseActivity implements View.OnClickListener {
+public class SearchChemicalActivity extends BaseActivity implements View.OnClickListener, SearchChemicalContract.View {
 
     private static final String TAG = SearchChemicalActivity.class.getSimpleName();
     private TextView mCancelTv;
@@ -47,9 +52,8 @@ public class SearchChemicalActivity extends BaseActivity implements View.OnClick
     private RecyclerView mChemicalRv;
     private ChemicalListAdapter chemicalListAdapter;
     private ArrayList<ChemicalInfo> chemicalInfos;
-    private ChemicalDao chemicalDao;
-    private FileDao fileDao;
     private EditText mSearchEt;
+    private SearchChemicalPresenter searchChemicalPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +68,7 @@ public class SearchChemicalActivity extends BaseActivity implements View.OnClick
     @Override
     protected void initView() {
         chemicalInfos = new ArrayList<>();
-        chemicalDao = AbstractMyChemicalDataBase
-                .getInstance(this)
-                .getChemicalDao();
-        fileDao = AbstractMyChemicalDataBase.getInstance(this).getFileDao();
+
         mCancelTv = findViewById(R.id.cancel_tv);
 
         mChemicalRv = findViewById(R.id.chemical_list_rv);
@@ -79,6 +80,8 @@ public class SearchChemicalActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void initData() {
+        searchChemicalPresenter = new SearchChemicalPresenter(ChemicalModelImpl.getInstance(this), this);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mChemicalRv.setLayoutManager(layoutManager);
         chemicalListAdapter = new ChemicalListAdapter(chemicalInfos);
@@ -101,7 +104,7 @@ public class SearchChemicalActivity extends BaseActivity implements View.OnClick
 
             @Override
             public void afterTextChanged(Editable s) {
-                searchChemicalByKeyWord(s.toString());
+                searchChemicalPresenter.searchChemicalByKeyword(s.toString());
             }
         });
         chemicalListAdapter.setOnItemChildClickListener(new BaseQuickAdapter
@@ -135,58 +138,35 @@ public class SearchChemicalActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    private void searchChemicalByKeyWord(final String keyWord) {
-        if (TextUtils.isEmpty(keyWord)) {
-            return;
+    @Override
+    public void showLoading() {
+//        showProgressDialog(getString(R.string.search_data));
+    }
+
+    @Override
+    public void dismissLoading() {
+//        hideProgressDialog();
+    }
+
+    @Override
+    public void showError(String msg) {
+
+    }
+
+    @Override
+    public void setPresenter(SearchChemicalContract.Presenter presenter) {
+        searchChemicalPresenter = (SearchChemicalPresenter) checkNotNull(presenter);
+    }
+
+    @Override
+    public void showChemicalList(ArrayList<ChemicalInfo> chemicalInfos) {
+        this.chemicalInfos.clear();
+        this.chemicalInfos.addAll(chemicalInfos);
+        if (this.chemicalInfos.size() == 0) {
+            mNoDataTv.setVisibility(View.VISIBLE);
+        } else {
+            mNoDataTv.setVisibility(View.GONE);
         }
-        Observable.create(new ObservableOnSubscribe<List<ChemicalInfo>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<ChemicalInfo>> emitter)
-                    throws Exception {
-                List<ChemicalInfo> chemicalInfos = chemicalDao.searchByKeyword("%"+keyWord+"%");
-                if (chemicalInfos!=null&&chemicalInfos.size()>0){
-                        for (ChemicalInfo c : chemicalInfos) {
-                            List<FileInfo> fileInfos = fileDao.searchFilesByChemicalId(c.getId());
-                            c.setFileInfos(fileInfos);
-                        }
-                }
-                if (chemicalInfos == null) {
-                    chemicalInfos = new ArrayList<>();
-                }
-                emitter.onNext(chemicalInfos);
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<ChemicalInfo>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-//                        showProgressDialog(getString(R.string.search_data));
-                    }
-
-                    @Override
-                    public void onNext(List<ChemicalInfo> chemicalInfos) {
-//                        hideProgressDialog();
-                        SearchChemicalActivity.this.chemicalInfos.clear();
-                        SearchChemicalActivity.this.chemicalInfos.addAll(chemicalInfos);
-                        if (SearchChemicalActivity.this.chemicalInfos.size() == 0) {
-                            mNoDataTv.setVisibility(View.VISIBLE);
-                        } else {
-                            mNoDataTv.setVisibility(View.GONE);
-                        }
-                        chemicalListAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "onError: " + e.getMessage());
-//                        hideProgressDialog();
-                    }
-
-                    @Override
-                    public void onComplete() {
-//                        hideProgressDialog();
-
-                    }
-                });
+        chemicalListAdapter.notifyDataSetChanged();
     }
 }

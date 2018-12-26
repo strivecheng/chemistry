@@ -19,14 +19,14 @@ public interface ChemicalModel {
     }
 
     interface GetChemicalInfoCallback extends BaseRequestCallback {
-        void getChemicalInfoByQRCodeSuccess(ChemicalInfo chemicalInfo);
+        void getChemicalInfoByQRCodeSuccess(ChemicalInfo chemicalInfo,int inventory);
     }
 
     void getChemicalList(GetChemicalListCallback callback);
 
-    void getChemicalInfoByQRCode(String code,GetChemicalInfoCallback chemicalInfoCallback);
+    void searchChemicalInfoByCode(String code,int inventory,GetChemicalInfoCallback chemicalInfoCallback);
 
-    void searchChemicalList(String keyWord,ChemicalListener listener);
+    void searchChemicalList(String keyWord,GetChemicalListCallback callback);
 
     void getFileList(String chemicalId);
 

@@ -22,9 +22,12 @@ import com.ruobilin.basf.basfchemical.base.BaseActivity;
 import com.ruobilin.basf.basfchemical.bean.ChemicalInfo;
 import com.ruobilin.basf.basfchemical.bean.FileInfo;
 import com.ruobilin.basf.basfchemical.common.Constant;
+import com.ruobilin.basf.basfchemical.contract.ScanSearchChemicalContract;
 import com.ruobilin.basf.basfchemical.dao.AbstractMyChemicalDataBase;
 import com.ruobilin.basf.basfchemical.dao.ChemicalDao;
 import com.ruobilin.basf.basfchemical.dao.FileDao;
+import com.ruobilin.basf.basfchemical.model.ChemicalModelImpl;
+import com.ruobilin.basf.basfchemical.presenter.ScanSearchChemicalPresenter;
 import com.ruobilin.basf.basfchemical.zxinglibrary.android.BeepManager;
 import com.ruobilin.basf.basfchemical.zxinglibrary.android.CaptureActivityHandler;
 import com.ruobilin.basf.basfchemical.zxinglibrary.android.InactivityTimer;
@@ -46,9 +49,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-//import cn.bingoogolapple.qrcode.core.QRCodeView;
-//import cn.bingoogolapple.qrcode.zxing.ZXingView;
-
 
 /**
  * Create by xingcc on 2018/12/3
@@ -56,7 +56,9 @@ import io.reactivex.schedulers.Schedulers;
  *
  * @author xingcc
  */
-public class ScanActivity extends BaseActivity implements View.OnClickListener, SurfaceHolder.Callback {//implements QRCodeView.Delegate, View.OnClickListener
+public class ScanActivity extends BaseActivity implements View.OnClickListener, SurfaceHolder
+        .Callback, ScanSearchChemicalContract.View {//implements QRCodeView.Delegate, View
+    // .OnClickListener
 
 
     private static final String TAG = ScanActivity.class.getSimpleName();
@@ -76,6 +78,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
     private SurfaceHolder surfaceHolder;
     private ChemicalDao chemicalDao;
     private FileDao fileDao;
+    private ScanSearchChemicalPresenter scanSearchChemicalPresenter;
 
 
     @Override
@@ -118,7 +121,8 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
 
          /*先获取配置信息*/
         try {
-            config = (ZxingConfig) getIntent().getExtras().get(com.ruobilin.basf.basfchemical.zxinglibrary.common.Constant.INTENT_ZXING_CONFIG);
+            config = (ZxingConfig) getIntent().getExtras().get(com.ruobilin.basf.basfchemical
+                    .zxinglibrary.common.Constant.INTENT_ZXING_CONFIG);
         } catch (Exception e) {
             Log.i("config", e.toString());
         }
@@ -159,6 +163,9 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     protected void initData() {
+        scanSearchChemicalPresenter = new ScanSearchChemicalPresenter(ChemicalModelImpl
+                .getInstance(this), this);
+
         hasSurface = false;
 
         inactivityTimer = new InactivityTimer(this);
@@ -238,82 +245,28 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
         vibrator.vibrate(200);
     }
 
-//    @Override
+    //    @Override
     public void onScanQRCodeSuccess(final String result) {
         Log.i(TAG, "result:" + result);
         vibrate();
 //        mZBarView.startSpot(); // 延迟0.1秒后开始识别
-        final Bundle bundle = new Bundle();
         String code = "";
+        int inventory = 0;
         try {
             JSONObject jsonObject = new JSONObject(result);
             code = jsonObject.getString(Constant.CODE);
             if (jsonObject.has(Constant.INVENTORY)) {
-                int inventory = jsonObject.getInt(Constant.INVENTORY);
-                bundle.putSerializable(Constant.INVENTORY, inventory);
+                inventory = jsonObject.getInt(Constant.INVENTORY);
             }
         } catch (JSONException e) {
             Toast.makeText(this, R.string.error_format, Toast.LENGTH_SHORT).show();
             e.printStackTrace();
             return;
         }
-        final String finalCode = code;
-        Observable.create(new ObservableOnSubscribe<ChemicalInfo>() {
-            @Override
-            public void subscribe(ObservableEmitter<ChemicalInfo> emitter) throws Exception {
-                ChemicalInfo chemicalInfo = chemicalDao.searchByCodeOrId(finalCode);
-                if (chemicalInfo != null) {
-                    List<FileInfo> fileInfos = fileDao.searchFilesByChemicalId(chemicalInfo.getId());
-                    chemicalInfo.setFileInfos(fileInfos);
-                } else {
-                    chemicalInfo = new ChemicalInfo();
-                }
-                emitter.onNext(chemicalInfo);
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ChemicalInfo>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        showProgressDialog(getString(R.string.search_data));
 
-                    }
-
-                    @Override
-                    public void onNext(ChemicalInfo chemicalInfo) {
-                        hideProgressDialog();
-                        if (!TextUtils.isEmpty(chemicalInfo.getId())) {
-                            bundle.putSerializable(Constant.INFO, chemicalInfo);
-                            skipActivity(ChemicalsDetailActivity.class, bundle);
-                            ScanActivity.this.finish();
-                        } else {
-                            Toast.makeText(ScanActivity.this, getString(R.string.not_search_data), Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "onError: " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        hideProgressDialog();
-                    }
-                });
-
+        scanSearchChemicalPresenter.searchChemicalByCode(code, inventory);
     }
-//
-//    @Override
-//    public void onCameraAmbientBrightnessChanged(boolean isDark) {
-//
-//    }
-//
-//    @Override
-//    public void onScanQRCodeOpenCameraError() {
-//
-//    }
+
 
     @Override
     public void onClick(View v) {
@@ -324,15 +277,6 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.flashLightLayout:
                 /*切换闪光灯*/
                 cameraManager.switchFlashLight(handler);
-//                if (isOpen) {
-////                    mZBarView.closeFlashlight();
-//                    isOpen = false;
-//                    mFlashLight.setImageResource(R.mipmap.flashlight_off);
-//                } else {
-////                    mZBarView.openFlashlight();
-//                    isOpen = true;
-//                    mFlashLight.setImageResource(R.mipmap.flashlight_on);
-//                }
                 break;
             default:
         }
@@ -449,5 +393,41 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
                                int height) {
 
+    }
+
+    @Override
+    public void showLoading() {
+        showProgressDialog(getString(R.string.search_data));
+    }
+
+    @Override
+    public void dismissLoading() {
+        hideProgressDialog();
+    }
+
+    @Override
+    public void showError(String msg) {
+
+    }
+
+    @Override
+    public void setPresenter(ScanSearchChemicalContract.Presenter presenter) {
+        scanSearchChemicalPresenter = (ScanSearchChemicalPresenter) presenter;
+    }
+
+    @Override
+    public void showChemicalInfo(ChemicalInfo chemicalInfo, int inventory) {
+        final Bundle bundle = new Bundle();
+        if (inventory > 0) {
+            bundle.putSerializable(Constant.INVENTORY, inventory);
+        }
+        if (!TextUtils.isEmpty(chemicalInfo.getId())) {
+            bundle.putSerializable(Constant.INFO, chemicalInfo);
+            skipActivity(ChemicalsDetailActivity.class, bundle);
+            ScanActivity.this.finish();
+        } else {
+            Toast.makeText(ScanActivity.this, getString(R.string.not_search_data), Toast
+                    .LENGTH_SHORT).show();
+        }
     }
 }

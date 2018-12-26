@@ -25,6 +25,7 @@ public class GetChemicalPresenter extends BasePresenterImpl implements GetChemic
         super(chemicalListView);
         this.mChemicalListView = checkNotNull(chemicalListView,"chemicalListView cannot be null");
         this.mChemicalModel = checkNotNull(chemicalModel,"chemicalModel cannot be null");
+        this.mChemicalListView.setPresenter(this);
     }
 
     @Override
@@ -40,6 +41,12 @@ public class GetChemicalPresenter extends BasePresenterImpl implements GetChemic
     @Override
     public void getChemicalList() {
         mChemicalModel.getChemicalList(this);
+    }
+
+    @Override
+    public void goChemicalDetail(ChemicalInfo chemicalInfo) {
+        checkNotNull(chemicalInfo,"chemicalInfo cannot be null!");
+        mChemicalListView.showChemicalDetail(chemicalInfo);
     }
 
     @Override

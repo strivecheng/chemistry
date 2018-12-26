@@ -4,7 +4,14 @@ import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
+import com.ruobilin.basf.basfchemical.R;
+import com.ruobilin.basf.basfchemical.activity.ChemicalsDetailActivity;
+import com.ruobilin.basf.basfchemical.activity.ScanActivity;
+import com.ruobilin.basf.basfchemical.activity.SearchChemicalActivity;
 import com.ruobilin.basf.basfchemical.bean.ChemicalInfo;
 import com.ruobilin.basf.basfchemical.bean.FileInfo;
 import com.ruobilin.basf.basfchemical.common.Constant;
@@ -57,6 +64,11 @@ public class ChemicalModelImpl implements ChemicalModel {
         fileDao = AbstractMyChemicalDataBase.getInstance(context).getFileDao();
     }
 
+    /**
+     * 单例
+     * @param context
+     * @return
+     */
     public static ChemicalModelImpl getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new ChemicalModelImpl(context);
@@ -70,13 +82,50 @@ public class ChemicalModelImpl implements ChemicalModel {
     }
 
     @Override
-    public void getChemicalInfoByQRCode(String code, GetChemicalInfoCallback chemicalInfoCallback) {
+    public void searchChemicalInfoByCode(final String code, final int inventory, final GetChemicalInfoCallback chemicalInfoCallback) {
+        Observable.create(new ObservableOnSubscribe<ChemicalInfo>() {
+            @Override
+            public void subscribe(ObservableEmitter<ChemicalInfo> emitter) throws Exception {
+                ChemicalInfo chemicalInfo = chemicalDao.searchByCodeOrId(code);
+                if (chemicalInfo != null) {
+                    List<FileInfo> fileInfos = fileDao.searchFilesByChemicalId(chemicalInfo.getId());
+                    chemicalInfo.setFileInfos(fileInfos);
+                } else {
+                    chemicalInfo = new ChemicalInfo();
+                }
+                emitter.onNext(chemicalInfo);
+                emitter.onComplete();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ChemicalInfo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        chemicalInfoCallback.onStart();
 
+                    }
+
+                    @Override
+                    public void onNext(ChemicalInfo chemicalInfo) {
+                        chemicalInfoCallback.getChemicalInfoByQRCodeSuccess(chemicalInfo,inventory);
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        chemicalInfoCallback.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        chemicalInfoCallback.onComplete();
+                    }
+                });
     }
 
     @Override
-    public void searchChemicalList(String keyWord, ChemicalListener listener) {
-
+    public void searchChemicalList(String keyWord, GetChemicalListCallback callback) {
+        searchChemicalByKeyWord(keyWord, callback);
     }
 
     @Override
@@ -179,4 +228,57 @@ public class ChemicalModelImpl implements ChemicalModel {
         }
         return null;
     }
+
+    /**
+     * 根据关键字查找数据
+     *
+     * @param keyWord
+     */
+    private void searchChemicalByKeyWord(final String keyWord, final GetChemicalListCallback
+            callback) {
+        if (TextUtils.isEmpty(keyWord)) {
+            return;
+        }
+        Observable.create(new ObservableOnSubscribe<List<ChemicalInfo>>() {
+            @Override
+            public void subscribe(ObservableEmitter<List<ChemicalInfo>> emitter)
+                    throws Exception {
+                List<ChemicalInfo> chemicalInfos = chemicalDao.searchByKeyword("%" + keyWord + "%");
+                if (chemicalInfos != null && chemicalInfos.size() > 0) {
+                    for (ChemicalInfo c : chemicalInfos) {
+                        List<FileInfo> fileInfos = fileDao.searchFilesByChemicalId(c.getId());
+                        c.setFileInfos(fileInfos);
+                    }
+                }
+                if (chemicalInfos == null) {
+                    chemicalInfos = new ArrayList<>();
+                }
+                emitter.onNext(chemicalInfos);
+                emitter.onComplete();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<ChemicalInfo>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        callback.onStart();
+                    }
+
+                    @Override
+                    public void onNext(List<ChemicalInfo> chemicalInfos) {
+                        callback.getChemicalListSuccess((ArrayList<ChemicalInfo>) chemicalInfos);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.onError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        callback.onComplete();
+                    }
+                });
+    }
+
 }

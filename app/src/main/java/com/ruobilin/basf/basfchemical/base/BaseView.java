@@ -7,6 +7,6 @@ package com.ruobilin.basf.basfchemical.base;
  * @author strivecheng
  */
 
-public interface BaseView<T> {
+public interface BaseView<T> extends BaseShowView{
     void setPresenter(T presenter);
 }

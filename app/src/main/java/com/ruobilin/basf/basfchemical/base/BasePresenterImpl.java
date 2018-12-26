@@ -3,7 +3,7 @@ package com.ruobilin.basf.basfchemical.base;
 /**
  * Created by xingcc on 2018/12/26.
  * main function
- *
+ * 基类presenter，处理基类请求数据回调
  * @author strivecheng
  */
 
