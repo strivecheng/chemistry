@@ -8,4 +8,14 @@ package com.ruobilin.basf.basfchemical.base;
  */
 
 public interface BasePresenter {
+    /**
+     * 绑定
+     */
+    void subscribe();
+
+    /**
+     * 解绑
+     */
+    void unSubscribe();
+
 }

@@ -1,6 +1,10 @@
 package com.ruobilin.basf.basfchemical.model;
 
+import com.ruobilin.basf.basfchemical.base.BaseRequestCallback;
+import com.ruobilin.basf.basfchemical.bean.ChemicalInfo;
 import com.ruobilin.basf.basfchemical.listener.ChemicalListener;
+
+import java.util.ArrayList;
 
 /**
  * Created by xingcc on 2018/12/10.
@@ -10,9 +14,17 @@ import com.ruobilin.basf.basfchemical.listener.ChemicalListener;
  */
 
 public interface ChemicalModel {
-    void getChemicalList(ChemicalListener listener);
+    interface GetChemicalListCallback extends BaseRequestCallback {
+        void getChemicalListSuccess(ArrayList<ChemicalInfo> chemicalInfos);
+    }
 
-    void getChemicalInfoByQRCode(String code,ChemicalListener listener);
+    interface GetChemicalInfoCallback extends BaseRequestCallback {
+        void getChemicalInfoByQRCodeSuccess(ChemicalInfo chemicalInfo);
+    }
+
+    void getChemicalList(GetChemicalListCallback callback);
+
+    void getChemicalInfoByQRCode(String code,GetChemicalInfoCallback chemicalInfoCallback);
 
     void searchChemicalList(String keyWord,ChemicalListener listener);
 

@@ -22,9 +22,12 @@ import com.ruobilin.basf.basfchemical.base.BaseActivity;
 import com.ruobilin.basf.basfchemical.bean.ChemicalInfo;
 import com.ruobilin.basf.basfchemical.bean.FileInfo;
 import com.ruobilin.basf.basfchemical.common.Constant;
+import com.ruobilin.basf.basfchemical.contract.GetChemicalContract;
 import com.ruobilin.basf.basfchemical.dao.AbstractMyChemicalDataBase;
 import com.ruobilin.basf.basfchemical.dao.ChemicalDao;
 import com.ruobilin.basf.basfchemical.dao.FileDao;
+import com.ruobilin.basf.basfchemical.model.ChemicalModelImpl;
+import com.ruobilin.basf.basfchemical.presenter.GetChemicalPresenter;
 import com.ruobilin.basf.basfchemical.utils.DateUtils;
 import com.ruobilin.basf.basfchemical.utils.FileUtils;
 
@@ -49,10 +52,11 @@ import pub.devrel.easypermissions.EasyPermissions;
  * main function: 首页
  * 展示药品列表，可以搜索
  * 先从数据查找数据，没有数据，找本地存储数据去解析
+ *
  * @author xingcc
  */
 public class MainActivity extends BaseActivity implements View.OnClickListener, EasyPermissions
-        .PermissionCallbacks {
+        .PermissionCallbacks, GetChemicalContract.View {
     private static final int REQUEST_CODE_QRCODE_PERMISSIONS = 1;
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int GO_SETTING = 10;
@@ -65,6 +69,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private ArrayList<ChemicalInfo> chemicalInfos;
     private ChemicalDao chemicalDao;
     private FileDao fileDao;
+    private GetChemicalPresenter getChemicalPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +101,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 .getInstance(this)
                 .getChemicalDao();
         fileDao = AbstractMyChemicalDataBase.getInstance(this).getFileDao();
-        getChemicalData();
+//        getChemicalData();
+        getChemicalPresenter = new GetChemicalPresenter(ChemicalModelImpl.getInstance(this), this);
+        getChemicalPresenter.getChemicalList();
     }
 
     /**
@@ -130,6 +137,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     public void onSubscribe(Disposable d) {
                         showProgressDialog(getString(R.string.getting_data));
                     }
+
                     @Override
                     public void onNext(List<ChemicalInfo> chemicalInfos) {
                         hideProgressDialog();
@@ -142,6 +150,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             mNoDataTv.setVisibility(View.GONE);
                         }
                     }
+
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "onError: " + e.getMessage());
@@ -202,7 +211,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case GO_SETTING:
-                    getChemicalData();
+//                    getChemicalData();
                     break;
                 default:
             }
@@ -297,5 +306,37 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         }
         return null;
+    }
+
+    @Override
+    public void setPresenter(Object presenter) {
+
+    }
+
+    @Override
+    public void showLoading() {
+        showProgressDialog(getString(R.string.getting_data));
+    }
+
+    @Override
+    public void dismissLoading() {
+        hideProgressDialog();
+    }
+
+    @Override
+    public void showError(String msg) {
+
+    }
+
+    @Override
+    public void showChemicalList(ArrayList<ChemicalInfo> chemicalInfos) {
+        this.chemicalInfos.clear();
+        this.chemicalInfos.addAll(chemicalInfos);
+        chemicalListAdapter.notifyDataSetChanged();
+        if (this.chemicalInfos.size() == 0) {
+            mNoDataTv.setVisibility(View.VISIBLE);
+        } else {
+            mNoDataTv.setVisibility(View.GONE);
+        }
     }
 }

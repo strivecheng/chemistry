@@ -1,5 +1,6 @@
 package com.ruobilin.basf.basfchemical.listener;
 
+import com.ruobilin.basf.basfchemical.base.BaseRequestCallback;
 import com.ruobilin.basf.basfchemical.bean.ChemicalInfo;
 import com.ruobilin.basf.basfchemical.bean.FileInfo;
 
@@ -12,7 +13,8 @@ import java.util.ArrayList;
  * @author strivecheng
  */
 
-public interface ChemicalListener {
+public interface ChemicalListener extends BaseRequestCallback {
+
     void getChemicalListSuccess(ArrayList<ChemicalInfo> chemicalInfos);
 
     void getChemicalInfoByQRCodeSuccess(ChemicalInfo chemicalInfo);
