@@ -76,8 +76,6 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
     private SurfaceHolder surfaceHolder;
-    private ChemicalDao chemicalDao;
-    private FileDao fileDao;
     private ScanSearchChemicalPresenter scanSearchChemicalPresenter;
 
 
@@ -114,10 +112,6 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     protected void initView() {
-        chemicalDao = AbstractMyChemicalDataBase
-                .getInstance(this)
-                .getChemicalDao();
-        fileDao = AbstractMyChemicalDataBase.getInstance(this).getFileDao();
 
          /*先获取配置信息*/
         try {

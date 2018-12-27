@@ -24,7 +24,7 @@ public class ScanSearchChemicalPresenter extends BasePresenterImpl implements
             .View showChemicalView) {
         super(showChemicalView);
         checkNotNull(chemicalModel, "chemicalModel cannot be null");
-        checkNotNull(mShowChemicalView, "chemicalListView cannot be null");
+        checkNotNull(showChemicalView, "showChemicalView cannot be null");
         this.mShowChemicalView = showChemicalView;
         this.mChemicalModel = chemicalModel;
     }
