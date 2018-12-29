@@ -2,48 +2,27 @@ package com.ruobilin.basf.basfchemical.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ruobilin.basf.basfchemical.R;
 import com.ruobilin.basf.basfchemical.adapter.ChemicalListAdapter;
 import com.ruobilin.basf.basfchemical.base.BaseActivity;
 import com.ruobilin.basf.basfchemical.bean.ChemicalInfo;
-import com.ruobilin.basf.basfchemical.bean.FileInfo;
 import com.ruobilin.basf.basfchemical.common.Constant;
 import com.ruobilin.basf.basfchemical.contract.GetChemicalContract;
-import com.ruobilin.basf.basfchemical.dao.AbstractMyChemicalDataBase;
-import com.ruobilin.basf.basfchemical.dao.ChemicalDao;
-import com.ruobilin.basf.basfchemical.dao.FileDao;
 import com.ruobilin.basf.basfchemical.model.ChemicalModelImpl;
 import com.ruobilin.basf.basfchemical.presenter.GetChemicalPresenter;
-import com.ruobilin.basf.basfchemical.utils.DateUtils;
-import com.ruobilin.basf.basfchemical.utils.FileUtils;
 
-import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
@@ -105,23 +84,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mScanIv.setOnClickListener(this);
         mSettingIv.setOnClickListener(this);
         mSearchLlt.setOnClickListener(this);
-        chemicalListAdapter.setOnItemChildClickListener(new BaseQuickAdapter
-                .OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                ChemicalInfo chemicalInfo = chemicalListAdapter.getItem(position);
-                if (chemicalInfo == null) {
-                    return;
-                }
-                switch (view.getId()) {
-                    case R.id.m_chemical_list_card_view:
-                        getChemicalPresenter.goChemicalDetail(chemicalInfo);
-                        break;
-                    default:
-                }
+        chemicalListAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            ChemicalInfo chemicalInfo = chemicalListAdapter.getItem(position);
+            if (chemicalInfo == null) {
+                return;
+            }
+            switch (view.getId()) {
+                case R.id.m_chemical_list_card_view:
+                    getChemicalPresenter.goChemicalDetail(chemicalInfo);
+                    break;
+                default:
             }
         });
+
     }
+
 
     @Override
     public void onClick(View v) {
